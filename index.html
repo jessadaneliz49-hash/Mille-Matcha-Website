@@ -187,4 +187,200 @@ footer {
 </footer>
 
 </body>
+  
+<style>
+#mm-cart {
+  background: #f7f3e9;
+  color: #244b38;
+  padding: 22px;
+  border-radius: 14px;
+  margin: 30px 0;
+  font-family: Arial, sans-serif;
+}
+.mm-product {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #ddd5c5;
+}
+.mm-add, #mm-place {
+  background: #244b38;
+  color: white;
+  border: 0;
+  border-radius: 20px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+.mm-qty button {
+  background: #244b38;
+  color: white;
+  border: 0;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+}
+.mm-qty span { padding: 0 8px; }
+#mm-total { font-size: 20px; font-weight: bold; }
+#mm-order {
+  width: 100%;
+  min-height: 120px;
+  margin: 12px 0;
+  padding: 10px;
+  box-sizing: border-box;
+}
+</style>
+
+<section id="mm-cart">
+  <h2>Order Your Matcha 🍵</h2>
+  <p>Select your drinks and add them to your cart.</p>
+
+  <div id="mm-products"></div>
+
+  <h3>Your Cart</h3>
+  <div id="mm-items">Your cart is empty.</div>
+  <p id="mm-total">Total: ₱0</p>
+
+  <button id="mm-place" onclick="mmPlaceOrder()">
+    Place Order via Messenger
+  </button>
+
+  <textarea id="mm-order" readonly
+    placeholder="Your order summary will appear here."></textarea>
+
+  <button class="mm-add" onclick="mmCopyOrder()">
+    Copy Order Summary
+  </button>
+</section>
+
+<script>
+const mmProducts = [
+  ["Daily Pour Matcha Latte",260],
+  ["Matcha Co",270],
+  ["Matcha Grey",270],
+  ["Matcha Silk",270],
+  ["Matcha Biscuit",280],
+  ["Cotton Candy Matcha",270],
+  ["Hojicha Oat Latte",250],
+  ["Hojicha Maple Latte",260],
+  ["Americano / Long Black",110],
+  ["Café Latte",150],
+  ["White Mocha",195],
+  ["Dark Mocha",195],
+  ["Spanish Latte",170],
+  ["Signature Chocolate",175],
+  ["Additional Sweetener",15]
+];
+
+let mmCart = {};
+
+const mmPeso = n => "₱" + n.toLocaleString("en-PH");
+
+document.getElementById("mm-products").innerHTML =
+  mmProducts.map((p,i) => `
+    <div class="mm-product">
+      <div>
+        <strong>${p[0]}</strong><br>
+        ${mmPeso(p[1])}
+      </div>
+      <button class="mm-add" onclick="mmAdd(${i})">
+        Add to Cart
+      </button>
+    </div>
+  `).join("");
+
+function mmAdd(i) {
+  mmCart[i] = (mmCart[i] || 0) + 1;
+  mmRender();
+}
+
+function mmChange(i, amount) {
+  mmCart[i] = (mmCart[i] || 0) + amount;
+  if (mmCart[i] <= 0) delete mmCart[i];
+  mmRender();
+}
+
+function mmRender() {
+  const entries = Object.entries(mmCart);
+  const area = document.getElementById("mm-items");
+
+  if (!entries.length) {
+    area.innerHTML = "Your cart is empty.";
+  } else {
+    area.innerHTML = entries.map(([i,q]) => `
+      <div class="mm-product">
+        <div>
+          <strong>${mmProducts[i][0]}</strong><br>
+          ${mmPeso(mmProducts[i][1] * q)}
+        </div>
+        <div class="mm-qty">
+          <button onclick="mmChange(${i},-1)">−</button>
+          <span>${q}</span>
+          <button onclick="mmChange(${i},1)">+</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  const total = entries.reduce((sum,[i,q]) =>
+    sum + mmProducts[i][1] * q, 0);
+
+  document.getElementById("mm-total").textContent =
+    "Total: " + mmPeso(total);
+}
+
+function mmSummary() {
+  const entries = Object.entries(mmCart);
+  if (!entries.length) {
+    alert("Please add an item to your cart first.");
+    return "";
+  }
+
+  let total = 0;
+  let message = "Hello Mille Matcha! I would like to order:\n\n";
+
+  entries.forEach(([i,q]) => {
+    const p = mmProducts[i];
+    const subtotal = p[1] * q;
+    total += subtotal;
+    message += `${p[0]} x ${q} = ${mmPeso(subtotal)}\n`;
+  });
+
+  message += `\nTOTAL: ${mmPeso(total)}\n\n`;
+  message += "Name:\nDelivery or Pickup:\nAddress (if delivery):\n";
+
+  return message;
+}
+
+function mmPlaceOrder() {
+  const message = mmSummary();
+  if (!message) return;
+
+  document.getElementById("mm-order").value = message;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(message).catch(() => {});
+  }
+
+  window.open("https://m.me/", "_blank");
+  alert("Your order summary is ready. Paste it in the Mille Matcha Messenger chat and send!");
+}
+
+function mmCopyOrder() {
+  const message = mmSummary();
+  if (!message) return;
+
+  document.getElementById("mm-order").value = message;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(message)
+      .then(() => alert("Order summary copied!"))
+      .catch(() => alert("Please copy the text from the box above."));
+  } else {
+    alert("Please copy the text from the box above.");
+  }
+}
+</script>
+
 </html>
