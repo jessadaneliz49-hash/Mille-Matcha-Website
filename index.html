@@ -320,6 +320,7 @@ function mmChange(i, amount) {
   mmRender();
 }
 
+
 function mmRender() {
   const entries = Object.entries(mmCart);
   const area = document.getElementById("mm-items");
@@ -349,42 +350,22 @@ function mmRender() {
     "Total: " + mmPeso(total);
 
   const orderBox = document.getElementById("mm-order");
+
   if (orderBox) {
-    orderBox.value = "";
+    let message = "YOUR ORDER SUMMARY\n\n";
+
+    entries.forEach(([i,q]) => {
+      const p = mmProducts[i];
+      message += `${p[0]} x ${q} = ${mmPeso(p[1] * q)}\n`;
+    });
+
+    message += `\nTOTAL: ${mmPeso(total)}`;
+
+    orderBox.value = entries.length ? message : "";
   }
 }
 
-
-function mmSummary() {
-  const entries = Object.entries(mmCart);
-  if (!entries.length) {
-    alert("Please add an item to your cart first.");
-    return "";
-  }
-
-  const name = document.getElementById("mm-name").value.trim();
-  const contact = document.getElementById("mm-contact").value.trim();
-  const orderType = document.getElementById("mm-order-type").value;
-  const address = document.getElementById("mm-address").value.trim();
-
-  if (!name || !contact) {
-    alert("Please enter your full name and contact number.");
-    return "";
-  }
-
-  if (orderType === "Delivery" && !address) {
-    alert("Please enter your delivery address.");
-    return "";
-  }
-
-  let total = 0;
-  let message = "Hello Mille Matcha! I would like to order:\n\n";
-
-  entries.forEach(([i,q]) => {
-    const p = mmProducts[i];
-    const subtotal = p[1] * q;
-    total += subtotal;
-    message += `${p[0]} x ${q} = ${mmPeso(subtotal)}\n`;
+  x ${q} = ${mmPeso(subtotal)}\n`;
   });
 
   message += `\nTOTAL: ${mmPeso(total)}\n\n`;
