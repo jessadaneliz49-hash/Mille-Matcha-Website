@@ -406,11 +406,18 @@ mmToggleAddress();
 
 
 
+
 function mmPlaceOrder() {
   const message = mmSummary();
   if (!message) return;
 
-  document.getElementById("mm-order").value = message;
+  const orderBox = document.getElementById("mm-order");
+  orderBox.value = message;
+
+  orderBox.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
 
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(message).catch(() => {});
@@ -418,6 +425,7 @@ function mmPlaceOrder() {
 
   alert(
     "YOUR ORDER SUMMARY IS READY! 🍵\n\n" +
+    "Please copy your order summary from the box.\n\n" +
     "1. Open Mille Matcha Facebook Page.\n" +
     "2. Tap MESSAGE.\n" +
     "3. Paste your order summary.\n" +
@@ -430,6 +438,7 @@ function mmPlaceOrder() {
     "_blank"
   );
 }
+
 
 
 
