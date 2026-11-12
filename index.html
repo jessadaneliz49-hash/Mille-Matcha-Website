@@ -166,6 +166,28 @@ footer {
   <div class="menu-item"><span>Additional Sweetener</span><span>₱15</span></div>
 </section>
 
+<section id="mm-cart">
+  <h2>Your Order 🍵</h2>
+  <p>Select your drinks and add them to your cart.</p>
+
+  <div id="mm-products"></div>
+
+  <h3>Your Cart</h3>
+  <div id="mm-items">Your cart is empty.</div>
+  <p id="mm-total">Total: ₱0</p>
+
+  <button id="mm-place" onclick="mmPlaceOrder()">
+    Place Order via Messenger
+  </button>
+
+  <textarea id="mm-order" readonly
+    placeholder="Your order summary will appear here."></textarea>
+
+  <button class="mm-add" onclick="mmCopyOrder()">
+    Copy Order Summary
+  </button>
+</section>
+
 <section id="visit" class="details">
   <h2>Visit Us</h2>
   <p><strong>Mille Matcha Cafe</strong></p>
@@ -232,27 +254,7 @@ footer {
 }
 </style>
 
-<section id="mm-cart">
-  <h2>Order Your Matcha 🍵</h2>
-  <p>Select your drinks and add them to your cart.</p>
 
-  <div id="mm-products"></div>
-
-  <h3>Your Cart</h3>
-  <div id="mm-items">Your cart is empty.</div>
-  <p id="mm-total">Total: ₱0</p>
-
-  <button id="mm-place" onclick="mmPlaceOrder()">
-    Place Order via Messenger
-  </button>
-
-  <textarea id="mm-order" readonly
-    placeholder="Your order summary will appear here."></textarea>
-
-  <button class="mm-add" onclick="mmCopyOrder()">
-    Copy Order Summary
-  </button>
-</section>
 
 <script>
 const mmProducts = [
