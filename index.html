@@ -405,6 +405,7 @@ mmToggleAddress();
 
 
 
+
 function mmPlaceOrder() {
   const message = mmSummary();
   if (!message) return;
@@ -415,19 +416,21 @@ function mmPlaceOrder() {
     navigator.clipboard.writeText(message).catch(() => {});
   }
 
-  window.open(
-    "https://www.facebook.com/share/14vW92vGTMj/",
-    "_blank"
-  );
-
-    alert("YOUR ORDER SUMMARY IS READY! 🍵\n\n" +
-    "PLEASE FOLLOW THESE STEPS:\n\n" +
+  alert(
+    "YOUR ORDER SUMMARY IS READY! 🍵\n\n" +
     "1. Open Mille Matcha Facebook Page.\n" +
     "2. Tap MESSAGE.\n" +
     "3. Paste your order summary.\n" +
     "4. Tap SEND.\n\n" +
-    "Thank you for ordering! 💚");
+    "Thank you for ordering! 💚"
+  );
+
+  window.open(
+    "https://www.facebook.com/share/14vW92vGTMj/",
+    "_blank"
+  );
 }
+
 
 
 
