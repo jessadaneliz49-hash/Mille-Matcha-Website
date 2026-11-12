@@ -347,6 +347,11 @@ function mmRender() {
 
   document.getElementById("mm-total").textContent =
     "Total: " + mmPeso(total);
+
+  const orderBox = document.getElementById("mm-order");
+  if (orderBox) {
+    orderBox.value = "";
+  }
 }
 
 
