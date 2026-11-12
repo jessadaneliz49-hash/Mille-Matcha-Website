@@ -171,7 +171,24 @@ footer {
   <p>Select your drinks and add them to your cart.</p>
 
   <div id="mm-products"></div>
+<h3>Customer Information</h3>
 
+<label>Full Name</label>
+<input type="text" id="mm-name" placeholder="Enter your full name" required>
+
+<label>Contact Number</label>
+<input type="tel" id="mm-contact" placeholder="09XXXXXXXXX" required>
+
+<label>Order Type</label>
+<select id="mm-order-type" onchange="mmToggleAddress()">
+  <option value="Delivery">Delivery</option>
+  <option value="Pick-up">Pick-up</option>
+</select>
+
+<div id="mm-address-box">
+  <label>Delivery Address</label>
+  <textarea id="mm-address" placeholder="Enter your complete delivery address"></textarea>
+</div>
   <h3>Your Cart</h3>
   <div id="mm-items">Your cart is empty.</div>
   <p id="mm-total">Total: ₱0</p>
@@ -332,10 +349,26 @@ function mmRender() {
     "Total: " + mmPeso(total);
 }
 
+
 function mmSummary() {
   const entries = Object.entries(mmCart);
   if (!entries.length) {
     alert("Please add an item to your cart first.");
+    return "";
+  }
+
+  const name = document.getElementById("mm-name").value.trim();
+  const contact = document.getElementById("mm-contact").value.trim();
+  const orderType = document.getElementById("mm-order-type").value;
+  const address = document.getElementById("mm-address").value.trim();
+
+  if (!name || !contact) {
+    alert("Please enter your full name and contact number.");
+    return "";
+  }
+
+  if (orderType === "Delivery" && !address) {
+    alert("Please enter your delivery address.");
     return "";
   }
 
@@ -350,10 +383,25 @@ function mmSummary() {
   });
 
   message += `\nTOTAL: ${mmPeso(total)}\n\n`;
-  message += "Name:\nDelivery or Pickup:\nAddress (if delivery):\n";
+  message += `Full Name: ${name}\n`;
+  message += `Contact: ${contact}\n`;
+  message += `Order Type: ${orderType}\n`;
+
+  if (orderType === "Delivery") {
+    message += `Delivery Address: ${address}\n`;
+  }
 
   return message;
 }
+function mmToggleAddress() {
+  const orderType = document.getElementById("mm-order-type").value;
+  const addressBox = document.getElementById("mm-address-box");
+
+  addressBox.style.display =
+    orderType === "Delivery" ? "block" : "none";
+}
+
+mmToggleAddress();
 
 
 function mmPlaceOrder() {
