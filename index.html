@@ -355,6 +355,7 @@ function mmSummary() {
   return message;
 }
 
+
 function mmPlaceOrder() {
   const message = mmSummary();
   if (!message) return;
@@ -365,9 +366,14 @@ function mmPlaceOrder() {
     navigator.clipboard.writeText(message).catch(() => {});
   }
 
-  window.open("https://m.me/", "_blank");
-  alert("Your order summary is ready. Paste it in the Mille Matcha Messenger chat and send!");
+  window.open(
+    "https://www.facebook.com/share/14vW92vGTMj/",
+    "_blank"
+  );
+
+  alert("Your order summary is ready. Paste it in the Mille Matcha chat and send!");
 }
+
 
 function mmCopyOrder() {
   const message = mmSummary();
