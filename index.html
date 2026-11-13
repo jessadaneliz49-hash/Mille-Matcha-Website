@@ -11,7 +11,7 @@ body {
   font-family: Georgia, serif;
   background: #f9f5eb;
   color: #29432f;
-  line-heigh hit: 1.6;
+  line-height : 1.6;
 }
 header {
   background: #29432f;
@@ -250,6 +250,13 @@ footer {
   padding: 12px 0;
   border-bottom: 1px solid #ddd5c5;
 }
+  .mm-description {
+  font-size: 13px;
+  color: #756b5d;
+  line-height: 1.6;
+  margin: 6px 0 0;
+  max-width: 280px;
+}
 .mm-add, #mm-place {
   background: #244b38;
   color: white;
@@ -281,21 +288,21 @@ footer {
 
 <script>
 const mmProducts = [
-  ["Daily Pour Matcha Latte",260],
-  ["Matcha Co",270],
-  ["Matcha Grey",270],
-  ["Matcha Silk",270],
-  ["Matcha Biscuit",280],
-  ["Cotton Candy Matcha",270],
-  ["Hojicha Oat Latte",250],
-  ["Hojicha Maple Latte",260],
-  ["Americano / Long Black",110],
-  ["Café Latte",150],
-  ["White Mocha",195],
-  ["Dark Mocha",195],
-  ["Spanish Latte",170],
-  ["Signature Chocolate",175],
-  ["Additional Sweetener",15]
+  ["Daily Pour Matcha Latte",260,'A blend of "okumidori" and "samidori". Level I (sweetened), Level II (balanced), Level III (unsweetened). House blend matcha with a nutty, kinako-like aroma and clear umami.'],
+  ["Matcha Co",270,"A luscious blend for sweet drink lovers — rich, refreshing chocolate on the first sip, followed by a smooth, earthy matcha finish."],
+  ["Matcha Grey",270,"Smooth black tea-infused layered with delicate matcha for a soft, earthy finish."],
+  ["Matcha Silk",270,"Refreshing coconut water layered with velvety matcha. Available unsweetened."],
+  ["Matcha Biscuit",280,"Creamy matcha layered with caramelized biscuit notes that linger softly on the finish."],
+  ["Cotton Candy Matcha",270,"Light toasted marshmallow aroma with a soft, candy-like sweetness. Finished with smooth, earthy matcha depth."],
+  ["Hojicha Oat Latte",250,"Made from tea leaves grown in the rich nature of Kyoto prefecture. Has a fragrant aroma and gentle sweetness."],
+  ["Hojicha Maple Latte",260,""],
+  ["Americano / Long Black",110,""],
+  ["Café Latte",150,""],
+  ["White Mocha",195,""],
+  ["Dark Mocha",195,""],
+  ["Spanish Latte",170,""],
+  ["Signature Chocolate",175,""],
+  ["Additional Sweetener",15,""]
 ];
 
 let mmCart = {};
@@ -308,12 +315,14 @@ document.getElementById("mm-products").innerHTML =
       <div>
         <strong>${p[0]}</strong><br>
         ${mmPeso(p[1])}
+        <p class="mm-description">${p[2]}</p>
       </div>
       <button class="mm-add" onclick="mmAdd(${i})">
         Add to Cart
       </button>
     </div>
   `).join("");
+
 
 function mmAdd(i) {
   mmCart[i] = (mmCart[i] || 0) + 1;
