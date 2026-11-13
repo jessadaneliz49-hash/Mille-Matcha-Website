@@ -180,6 +180,7 @@ footer {
 <textarea id="mm-order" readonly
   placeholder="Your order summary will appear here."></textarea>
 
+
 <h3>Customer Information</h3>
 
 <label>Full Name</label>
@@ -197,12 +198,27 @@ footer {
 <div id="mm-address-box">
   <label>Delivery Address</label>
   <textarea id="mm-address" placeholder="Enter your complete delivery address"></textarea>
-</div>
-  
 
-  <button id="mm-place" onclick="mmPlaceOrder()">
-    Place Order via Messenger
-  </button>
+  <label>Choose Your Rider</label>
+  <select id="mm-rider" onchange="mmUpdateDeliveryFee()">
+    <option value="Grab">Grab - ₱50</option>
+    <option value="Foodpanda">Foodpanda - ₱50</option>
+  </select>
+
+  <p id="mm-delivery-fee">Delivery Fee: ₱50</p>
+</div>
+
+<label>Payment Method</label>
+<select id="mm-payment-method">
+  <option value="GCash">GCash</option>
+  <option value="Maya">Maya</option>
+  <option value="Bank Transfer">Bank Transfer</option>
+</select>
+
+<button id="mm-place" onclick="mmPlaceOrder()">
+  Place Order via Messenger
+</button>
+
 
   
 
@@ -393,6 +409,13 @@ function mmRender() {
   const contact = document.getElementById("mm-contact").value.trim();
   const orderType = document.getElementById("mm-order-type").value;
   const address = document.getElementById("mm-address").value.trim();
+  const paymentMethod = document.getElementById("mm-payment-method").value;
+
+  const rider = orderType === "Delivery"
+    ? document.getElementById("mm-rider").value
+    : "None - Customer Pick-up";
+
+  const deliveryFee = orderType === "Delivery" ? 50 : 0;
 
   if (!name || !contact) {
     alert("Please enter your full name and contact number.");
@@ -404,35 +427,65 @@ function mmRender() {
     return "";
   }
 
-  let total = 0;
-  let message = "Hello Mille Matcha! I would like to order:\n\n";
+  let subtotalTotal = 0;
+  let message = "MILLE MATCHA CAFE\n";
+  message += "CUSTOMER ORDER RECEIPT\n";
+  message += "============================\n\n";
+  message += "ORDER ITEMS:\n\n";
 
-  entries.forEach(([i,q]) => {
+  entries.forEach(([i, q]) => {
     const p = mmProducts[i];
     const subtotal = p[1] * q;
-    total += subtotal;
+    subtotalTotal += subtotal;
+
     message += `${p[0]} x ${q} = ${mmPeso(subtotal)}\n`;
   });
 
-  message += `\nTOTAL: ${mmPeso(total)}\n\n`;
+  const grandTotal = subtotalTotal + deliveryFee;
+
+  message += `\nSUBTOTAL: ${mmPeso(subtotalTotal)}\n`;
+  message += `DELIVERY FEE: ${mmPeso(deliveryFee)}\n`;
+  message += `TOTAL: ${mmPeso(grandTotal)}\n\n`;
+
+  message += "CUSTOMER INFORMATION:\n";
   message += `Full Name: ${name}\n`;
   message += `Contact: ${contact}\n`;
   message += `Order Type: ${orderType}\n`;
 
   if (orderType === "Delivery") {
     message += `Delivery Address: ${address}\n`;
+    message += `Delivery Rider: ${rider}\n`;
   }
+
+  message += `Payment Method: ${paymentMethod}\n`;
+  message += "Payment Status: PENDING VERIFICATION\n";
+  message += "Please send payment screenshot through Messenger.\n\n";
+  message += "============================\n";
+  message += "Thank you for ordering! 💚";
 
   return message;
 }
+
+function mmUpdateDeliveryFee() {
+  const orderType = document.getElementById("mm-order-type").value;
+  const fee = orderType === "Delivery" ? 50 : 0;
+
+  document.getElementById("mm-delivery-fee").textContent =
+    "Delivery Fee: " + mmPeso(fee);
+}
+
 function mmToggleAddress() {
   const orderType = document.getElementById("mm-order-type").value;
   const addressBox = document.getElementById("mm-address-box");
 
   addressBox.style.display =
     orderType === "Delivery" ? "block" : "none";
+
+  mmUpdateDeliveryFee();
 }
+
 mmToggleAddress();
+
 
 
 
