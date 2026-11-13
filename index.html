@@ -11,7 +11,7 @@ body {
   font-family: Georgia, serif;
   background: #f9f5eb;
   color: #29432f;
-  line-height: 1.6;
+  line-heigh hit: 1.6;
 }
 header {
   background: #29432f;
@@ -171,6 +171,15 @@ footer {
   <p>Select your drinks and add them to your cart.</p>
 
   <div id="mm-products"></div>
+
+<h3>Your Cart</h3>
+<div id="mm-items">Your cart is empty.</div>
+<p id="mm-total">Total: ₱0</p>
+
+<h3>Order Summary</h3>
+<textarea id="mm-order" readonly
+  placeholder="Your order summary will appear here."></textarea>
+
 <h3>Customer Information</h3>
 
 <label>Full Name</label>
@@ -189,16 +198,13 @@ footer {
   <label>Delivery Address</label>
   <textarea id="mm-address" placeholder="Enter your complete delivery address"></textarea>
 </div>
-  <h3>Your Cart</h3>
-  <div id="mm-items">Your cart is empty.</div>
-  <p id="mm-total">Total: ₱0</p>
+  
 
   <button id="mm-place" onclick="mmPlaceOrder()">
     Place Order via Messenger
   </button>
 
-  <textarea id="mm-order" readonly
-    placeholder="Your order summary will appear here."></textarea>
+  
 
   <button class="mm-add" onclick="mmCopyOrder()">
     Copy Order Summary
@@ -365,7 +371,37 @@ function mmRender() {
   }
 }
 
-  x ${q} = ${mmPeso(subtotal)}\n`;
+  function mmSummary() {
+  const entries = Object.entries(mmCart);
+
+  if (!entries.length) {
+    alert("Please add an item to your cart first.");
+    return "";
+  }
+
+  const name = document.getElementById("mm-name").value.trim();
+  const contact = document.getElementById("mm-contact").value.trim();
+  const orderType = document.getElementById("mm-order-type").value;
+  const address = document.getElementById("mm-address").value.trim();
+
+  if (!name || !contact) {
+    alert("Please enter your full name and contact number.");
+    return "";
+  }
+
+  if (orderType === "Delivery" && !address) {
+    alert("Please enter your delivery address.");
+    return "";
+  }
+
+  let total = 0;
+  let message = "Hello Mille Matcha! I would like to order:\n\n";
+
+  entries.forEach(([i,q]) => {
+    const p = mmProducts[i];
+    const subtotal = p[1] * q;
+    total += subtotal;
+    message += `${p[0]} x ${q} = ${mmPeso(subtotal)}\n`;
   });
 
   message += `\nTOTAL: ${mmPeso(total)}\n\n`;
@@ -386,7 +422,6 @@ function mmToggleAddress() {
   addressBox.style.display =
     orderType === "Delivery" ? "block" : "none";
 }
-
 mmToggleAddress();
 
 
